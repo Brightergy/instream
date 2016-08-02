@@ -4,7 +4,7 @@ defmodule Instream.Query.URL do
   """
 
   alias Instream.Encoder.Precision
-
+  import Instream.Connection.Config, only: [maybe_fetch_system: 1]
 
   @doc """
   Appends authentication credentials to an URL.
@@ -102,7 +102,7 @@ defmodule Instream.Query.URL do
       false -> "?"
     end
 
-    "#{ url }#{ glue }#{ key }=#{ URI.encode value }"
+    "#{ url }#{ glue }#{ key }=#{ URI.encode maybe_fetch_system(value) }"
   end
 
   defp url(config, endpoint) do

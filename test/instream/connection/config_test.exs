@@ -53,7 +53,6 @@ defmodule Instream.Connection.ConfigTest do
     defmodule conn do
       use Instream.Connection, otp_app: test
     end
-
     assert sys_val == conn.config([ key ])
 
     System.delete_env(sys_var)

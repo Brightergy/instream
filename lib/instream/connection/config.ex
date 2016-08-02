@@ -49,6 +49,23 @@ defmodule Instream.Connection.Config do
   defp maybe_fetch_deep(config, nil),  do: config
   defp maybe_fetch_deep(config, keys), do: get_in(config, keys)
 
-  defp maybe_fetch_system({ :system, var }), do: System.get_env(var)
-  defp maybe_fetch_system(config),           do: config
+  @doc false
+  def maybe_fetch_system(config) when is_list(config) do
+    config = config
+    |> Enum.map(fn x ->
+      maybe_fetch_system(x)
+    end)
+    case config[:auth] |> is_list do
+      true ->
+        auth_config = maybe_fetch_system(config[:auth])
+        Keyword.merge(config, [auth: auth_config])
+      false ->
+        config
+    end
+  end
+  def maybe_fetch_system({item, {:system, var}}) do
+    {item, maybe_fetch_system({:system, var})}
+  end
+  def maybe_fetch_system({ :system, var }), do: System.get_env(var)
+  def maybe_fetch_system(config),           do: config
 end

@@ -40,7 +40,7 @@ defmodule Instream.Mixfile do
       { :excoveralls, "~> 0.5", only: :test },
 
       { :hackney, "~> 1.1" },
-      { :poison,  "3.0" },
+      { :poison,  "~> 3.0" },
       { :poolboy, "~> 1.5" } ]
   end
 
